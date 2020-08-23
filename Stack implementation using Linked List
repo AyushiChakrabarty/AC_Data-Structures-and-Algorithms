@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+
+
+//Node structure created
+struct Node 
+{
+   int data;
+   struct Node *next;
+};
+
+struct Node* top = NULL;        //Top initialized as NULL, initially empty
+
+void push(int a)                // To add elements to the stack
+{
+   struct Node* newnode = new Node();
+   newnode->data = a;
+   newnode->next = top;
+   top = newnode;
+}
+
+void pop()                      // To delete elements from the stack
+{
+   if(top==NULL)
+   {
+        cout<<"Stack is already empty!..."<<endl;
+   }
+   else 
+   {
+      cout<<"The popped element:"<< top->data<<endl;
+      top = top->next;
+   }
+}
+
+void display()                  // To display elements of the stack
+{
+   struct Node* temp;
+   if(top==NULL)
+   {
+        cout<<"Stack is empty!";
+   }
+   else 
+   {
+      temp = top;
+      cout<<"Elements are:";
+      while (temp!=NULL) 
+      {
+         cout<< temp->data <<"->";
+         temp = temp->next;
+      }
+   }
+   cout<<endl;
+}
+
+//Main program
+int main() 
+{
+   int c, a;
+   cout<<"Options are:"<<endl;
+   cout<<"1. Push  2. Pop  3. Display  4.Exit"<<endl;
+   do {
+      cout<<"Enter choice: "<<endl;
+      cin>>c;
+      switch(c)                             //switch case to implement user choice based operation implementation 
+      {
+         case 1: {
+                    cout<<"Enter value:"<<endl;
+                    cin>>a;
+                    push(a);
+                    break;
+                 }
+         case 2: {
+                    pop();
+                    break;
+                 }
+         case 3: {
+                    display();
+                    break;
+                 }
+         case 4: {
+                    cout<<"Exiting the program....."<<endl;
+                    break;
+                 }
+         default:{
+                    cout<<"Wrong Choice"<<endl;
+                 }
+      }
+   }while(c!=4);                        //exit condition
+   return 0;
+}
