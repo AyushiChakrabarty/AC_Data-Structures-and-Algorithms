@@ -1,0 +1,47 @@
+//QuickSort in C++
+#include<iostream>
+using namespace std;
+
+
+int Partition(int *A, int start, int end)
+{
+    int i;
+    int pivot=A[end];
+    int part_i=start;
+    for(i=start; i<end; i++)
+    {
+        if(A[i]<=pivot)
+        {
+            swap(A[i],A[part_i]);
+            part_i++;
+        }
+    }
+    swap(A[part_i],A[end]);
+    return part_i;
+}
+
+void quicksort(int *A, int start, int end)
+{
+    if(start<end)
+    {
+        int part_i=Partition(A,start,end);
+        quicksort(A,start,part_i-1);
+        quicksort(A,part_i+1,end);
+    }
+}
+
+int main()
+{
+    int arr[20],i,n;
+    cout<<"Enter the number of elements that your array will contain:"<<endl;
+    cin>>n;
+    cout<<"Enter the elements:"<<endl;
+    for(i=0;i<n;i++)
+        cin>>arr[i];
+    
+    quicksort(arr,0,n-1);
+    for(i=0;i<n;i++)
+        cout<<arr[i]<<" ";
+    
+    return 0;
+}
