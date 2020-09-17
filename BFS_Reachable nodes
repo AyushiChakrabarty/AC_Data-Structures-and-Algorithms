@@ -1,0 +1,92 @@
+//TASK-2_Check if nodes are reachable or not
+#include <iostream> 
+#include <list> 
+using namespace std; 
+  
+class Graph 
+{ 
+    int V; 
+    list<int>* adj;  
+  public: 
+    Graph(int V); 
+    void addEdge(int v, int w);  
+    bool reach(int s, int d); 
+}; 
+  
+  
+Graph::Graph(int V) 
+{ 
+    this->V = V; 
+    adj = new list<int>[V]; 
+} 
+
+//Add the nodes to the graph  
+void Graph::addEdge(int v, int w) 
+{ 
+    adj[v].push_back(w); 
+    adj[w].push_back(v); 
+} 
+  
+
+//Function to check reachibility
+bool Graph::reach(int source, int destination) 
+{ 
+    
+    if (source==destination) 
+        return true; 
+  
+    
+    bool* visited = new bool[V]; 
+    for (int i = 0; i < V; i++) 
+        visited[i] = false; 
+  
+    
+    list<int> queue; 
+  
+    
+    visited[source] = true; 
+    queue.push_back(source); 
+  
+    
+    list<int>::iterator i; 
+  
+    while (!queue.empty()) { 
+       
+        source= queue.front(); 
+        queue.pop_front(); 
+  
+        for (i = adj[source].begin(); i != adj[source].end(); ++i) 
+        { 
+  
+            if (*i == destination) 
+                return true; 
+  
+            if (!visited[*i]) { 
+                visited[*i] = true; 
+                queue.push_back(*i); 
+            } 
+        } 
+    } 
+  
+    return false; 
+} 
+  
+//Main program
+int main() 
+{ 
+    Graph g(5); 
+    g.addEdge(0, 2); 
+    g.addEdge(2, 1); 
+    g.addEdge(1, 0); 
+    g.addEdge(3, 4); 
+  
+    int u = 2;
+    int v = 3; 
+    if (g.reach(u, v)) 
+        cout<<"The nodes are reachable\n";
+    
+    else
+        cout << "The nodes are not reachable\n"; 
+  
+    return 0; 
+}
