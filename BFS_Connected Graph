@@ -1,0 +1,111 @@
+//TASK-1_Check if the graph is connected or not
+
+#include<iostream> 
+#include <list> 
+  
+using namespace std; 
+  
+class Graph 
+{ 
+    int V;     
+    list<int> *adj;    
+  public: 
+    Graph(int V);  
+    void addEdge(int v, int w);  
+    bool BFS(int source);   
+}; 
+  
+Graph::Graph(int V) 
+{ 
+    this->V = V; 
+    adj = new list<int>[V]; 
+} 
+  
+void Graph::addEdge(int v, int w) 
+{ 
+    adj[v].push_back(w); 
+} 
+  
+bool Graph::BFS(int s) 
+{ 
+    bool flag=true;
+    
+    bool *visited = new bool[V]; 
+    for(int i = 0; i < V; i++) 
+        visited[i] = false; 
+  
+    list<int> queue; 
+  
+    visited[s] = true; 
+    queue.push_back(s); 
+  
+    list<int>::iterator i; 
+  
+    while(!queue.empty()) 
+    { 
+        s = queue.front(); 
+        cout << s << " "; 
+        queue.pop_front(); 
+  
+
+        for (i = adj[s].begin(); i != adj[s].end(); ++i) 
+        { 
+            if (!visited[*i]) 
+            { 
+                visited[*i] = true; 
+                queue.push_back(*i);
+            }
+            else
+            {
+                flag=false;
+                return flag;
+                
+            }
+                
+        } 
+    } 
+} 
+  
+// Driver program to test methods of graph class 
+int main() 
+{ 
+    // Create a graph given in the above diagram 
+    Graph g1(8); 
+    g1.addEdge(1, 8); 
+    g1.addEdge(8, 2); 
+    g1.addEdge(2, 5); 
+    g1.addEdge(2, 3); 
+    g1.addEdge(2, 4); 
+    g1.addEdge(3, 4);
+    g1.addEdge(4, 6);
+    g1.addEdge(6, 5);
+    g1.addEdge(5, 7);
+    
+
+    Graph g2(4); 
+    g2.addEdge(0, 2); 
+    g2.addEdge(2, 1); 
+    g2.addEdge(1, 0); 
+    g2.addEdge(3, 4); 
+
+    int s=0;
+    
+    cout<<"\nGraph-1\n";
+    if(g1.BFS(s)==true)
+    {
+        cout<<"\n The graph is connected\n";
+    }
+    else
+        cout<<"\nThe graph is not connected\n";
+        
+    
+    cout<<"\nGraph-2\n";
+    if(g2.BFS(s)==true)
+    {
+        cout<<"\n The graph is connected\n";
+    }
+    else
+        cout<<"\nThe graph is not connected\n";
+    return 0; 
+}
+
