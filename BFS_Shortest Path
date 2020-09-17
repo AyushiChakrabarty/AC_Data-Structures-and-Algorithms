@@ -1,0 +1,152 @@
+#include <iostream>
+#include <list>
+#include <queue>
+
+using namespace std;
+
+// This class represents a directed graph using
+// adjacency list representation
+class Graph
+{
+    int V; // No. of vertices
+
+    //array of vectors
+
+public:
+    vector<int> adj;
+
+    Graph(int V); // Constructor
+
+    // function to add an edge to graph
+    void addEdge(vector<int> adj[], int v, int w);
+
+    // prints BFS traversal from a given source s
+    bool BFS(vector<int> adj[], int s, int d, int p[], int dist[]);
+
+    //to find the shortest path from single source in a graph
+    void SPU(vector<int> adj[], int source, int destination);
+};
+
+Graph::Graph(int V)
+{
+    this->V = V;
+}
+
+void Graph::addEdge(vector<int> adj[], int v, int w)
+{
+    adj[v].push_back(w);
+    adj[w].push_back(v);
+}
+
+bool Graph::BFS(vector<int> adj[], int source, int destination, int prv[], int dist[])
+{
+    // Mark all the vertices as not visited
+    bool visited[V];
+    for (int i = 0; i < V; i++)
+        visited[i] = false;
+
+    // Create a queue for BFS
+    list<int> q;
+
+    //declaring all the values of prev array as -1 since 0 is already present as a graph vertex;
+    //declaring all the values of dist array as maximum;
+    for (int i = 0; i < V; i++)
+    {
+        dist[i] = INT_MAX;
+        prv[i] = -1;
+    }
+
+    visited[source] = true;
+    dist[source] = 0;
+    q.push_back(source);
+    //iterate till the queue is empty
+    while (!q.empty())
+    {
+
+        //top element of the queue
+        int currentv = q.front();
+        q.pop_front();
+        for (int i = 0; i < adj[currentv].size(); i++)
+        {
+            //checking if the adjacent node is visited or not
+            if (visited[adj[currentv][i]] == false)
+            {
+                //visiting its adjacent nodes
+                visited[adj[currentv][i]] = true;
+                //since the next node's previous will be the current node
+                prv[adj[currentv][i]] = currentv;
+                dist[adj[currentv][i]] = dist[currentv] + 1;
+
+                //pushing the neighbours of current vertex int the queue for
+                //further BFS process
+                q.push_back(adj[currentv][i]);
+
+                //we'll stop this process when the reach
+                //our final destination point in the graph
+                //since after finding the destination there
+                //is not further use of doing this process
+
+                if (adj[currentv][i] == destination)
+                {
+                    //once we exit the dist of dest remains max
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+void Graph::SPU(vector<int> adj[], int source, int destination)
+{
+    int dist[V];
+    int prev[V];
+
+    if (BFS(adj, source, destination, prev, dist) == false)
+    {
+        cout << "cant reach that point!";
+    }
+
+    else
+    {
+        //a list to keep track of the path
+        list<int> sp;
+        int x = destination;
+        sp.push_back(x);
+        while (prev[x] != -1)
+        {
+            sp.push_back(prev[x]);
+            //assigning the previous node to the path
+            x = prev[x];
+        }
+
+        //to print the path in the right direction hence reverse the direction;
+        sp.reverse();
+        cout << "the shortest path from " << source << " to " << destination << " is:: ";
+        for (auto it = sp.begin(); it != sp.end(); it++)
+        {
+            cout << *it << " ";
+        }
+    }
+}
+int main()
+{
+
+    vector<int> adj[10];
+    Graph g(10);
+    g.addEdge(adj, 0, 1);
+    g.addEdge(adj, 0, 2);
+    g.addEdge(adj, 2, 3);
+    g.addEdge(adj, 3, 1);
+    g.addEdge(adj, 4, 5);
+    g.addEdge(adj, 4, 6);
+    g.addEdge(adj, 4, 8);
+    g.addEdge(adj, 5, 6);
+    g.addEdge(adj, 5, 7);
+    g.addEdge(adj, 7, 8);
+    g.addEdge(adj, 7, 9);
+    g.addEdge(adj, 8, 9);
+    g.SPU(adj, 4, 9);
+    return 0;
+}
