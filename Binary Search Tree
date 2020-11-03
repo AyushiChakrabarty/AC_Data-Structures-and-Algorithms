@@ -1,0 +1,195 @@
+#include<stdio.h> 
+#include<stdlib.h> 
+#include<iostream>
+using namespace std;
+
+struct node 
+{ 
+	int key; 
+	struct node *left, *right; 
+}; 
+
+
+struct node *newNode(int item) 
+{ 
+	struct node *temp = (struct node *)malloc(sizeof(struct node)); 
+	temp->key = item; 
+	temp->left = temp->right = NULL; 
+	return temp; 
+} 
+
+
+void inorder(struct node *root) 
+{ 
+	if (root != NULL) 
+	{ 
+		inorder(root->left); 
+		printf("%d ", root->key); 
+		inorder(root->right); 
+	} 
+} 
+
+
+struct node* insert(struct node* node, int key) 
+{ 
+	
+	if (node == NULL) 
+		return newNode(key); 
+
+
+	if (key < node->key) 
+		node->left = insert(node->left, key); 
+
+	else
+		node->right = insert(node->right, key); 
+
+	return node; 
+} 
+
+
+
+struct node * minValueNode(struct node* node) 
+{ 
+	struct node* current = node; 
+	while (current->left != NULL) 
+		current = current->left; 
+
+	return current; 
+} 
+
+
+struct node* deleteNode(struct node* root, int key) 
+{ 
+	if (root == NULL) 
+		return root; 
+	if (key < root->key) 
+		root->left = deleteNode(root->left, key); 
+	else if (key > root->key) 
+		root->right = deleteNode(root->right, key); 
+	else
+	{  
+		if (root->left == NULL) 
+		{ 
+			struct node *temp = root->right; 
+			free(root); 
+			return temp; 
+		} 
+		else if (root->right == NULL) 
+		{ 
+			struct node *temp = root->left; 
+			free(root); 
+			return temp; 
+		} 
+		struct node* temp = minValueNode(root->right); 
+		root->key = temp->key;
+		root->right = deleteNode(root->right, temp->key); 
+	} 
+	return root; 
+}
+
+//COUNT THE ELEMENTS IN BETWEEN 
+int count(struct node* root, int lower, int upper)
+{
+    if(root==NULL)
+        return 0;
+    
+    if(root->key<=upper && root->key>=lower)
+        return 1 + count(root->left, lower, upper) + count(root->right, lower, upper);
+        
+    else if(root->key < lower)
+        return count(root->right, lower, upper);
+    
+    else if(root->key > upper)
+        return count(root->right, lower, upper);
+        
+}
+
+//PRINT THE ELEMENTS IN BETWEEN 
+void print(node *root, int lower, int upper)  
+{  
+    if ( root == NULL )  
+        return;  
+      
+    if ( root->key> lower)  
+        print(root->left, lower, upper);  
+      
+    if ( lower <= root->key && upper>= root->key )  
+        cout<<root->key<<" ";  
+      
+    if ( upper > root->key )  
+        print(root->right, lower, upper);  
+}  
+
+//DELETE THE ELEMENTS IN BETWEEN
+struct node* remove_Range(struct node* node, int lower, int upper) 
+{ 
+  
+    if (node==NULL) 
+        return NULL; 
+  
+    node->left = remove_Range(node->left, lower, upper); 
+    node->right = remove_Range(node->right, lower, upper); 
+  
+    if (node->key >= lower && node->key <= upper) 
+        return deleteNode(node,node->key); 
+  
+    return node; 
+}
+
+
+// Driver Program to test above functions 
+int main() 
+{ 
+	/* Let us create following BST 
+			50 
+		/	 \ 
+		30	 70 
+		/ \ / \ 
+	20 40 60 80 */
+	struct node *root = NULL; 
+	root = insert(root, 50); 
+	root = insert(root, 30); 
+	root = insert(root, 20); 
+	root = insert(root, 40); 
+	root = insert(root, 70); 
+	root = insert(root, 60); 
+	root = insert(root, 80);
+	root = insert(root, 90); 
+	root = insert(root, 100); 
+	root = insert(root, 110); 
+	root = insert(root, 120); 
+	root = insert(root, 130);
+	
+
+    printf("Inorder traversal of the given tree \n"); 
+	inorder(root); 
+
+	printf("\nDelete 20\n"); 
+	root = deleteNode(root, 20); 
+	printf("Inorder traversal of the modified tree \n"); 
+	inorder(root); 
+
+	printf("\nDelete 30\n"); 
+	root = deleteNode(root, 30); 
+	printf("Inorder traversal of the modified tree \n"); 
+	inorder(root); 
+
+	printf("\nDelete 50\n"); 
+	root = deleteNode(root, 50); 
+	printf("Inorder traversal of the modified tree \n"); 
+	inorder(root);
+
+	int l, u;
+	cout<<"\nEnter lower limit: ";
+	 cin>>l;
+	cout<<"Enter upper limit: ";
+	 cin>>u;
+	cout<<"\n"<<"Total nodes in between "<<l<<" and "<<u<<" = "<<count(root, l, u);
+	cout<<"\n";
+	print(root,l,u);
+	cout<<"\n";
+    cout<<"Deleting the nodes in the given range..........\n";
+    remove_Range(root, l, u);
+    cout<<"After deleting in the given range:\n";
+    inorder(root);
+}
