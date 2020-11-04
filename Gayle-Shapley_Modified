@@ -1,0 +1,115 @@
+//Stable matching problem
+// Consider a town with n men and n women seeking to get married to one
+// another. Each man has a preference list that ranks all the women, and each
+// woman has a preference list that ranks all the men.
+// The set of all 2n people is divided into two categories: good people and
+// bad people. Suppose that for some number k, 1≤ k ≤ n − 1, there are k good
+// men and k good women; thus there are n − k bad men and n − k bad women.
+// Everyone would rather marry any good person than any bad person.
+// Formally, each preference list has the property that it ranks each good person
+// of the opposite gender higher than each bad person of the opposite gender: its
+// first k entries are the good people (of the opposite gender) in some order, and
+// its next n − k are the bad people (of the opposite gender) in some order.
+// Show that in every stable matching, every good man is married to a good woman.
+
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+#define total 100
+
+int n;
+int wom_p[total][total], man_p[total][total];
+int match[total], watch[total], single[total];
+
+//Finding a stable match
+void stable_marriage()
+{
+    int m,w;
+    int flag=1;
+    
+    for(m=0; m<n; m++)
+    {
+        single[m]=1;
+        match[m]=-1;
+    }
+    
+    for(w=0; w<n; w++)
+    {
+        watch[w]=n;
+        man_p[w][n]=n;
+    }
+    
+    while(flag==1)
+    {
+        flag=0;
+        for(m=0; m<n; m++)
+        {
+            if(single[m])
+            {
+                flag=1;
+                match[m]++;
+                w=wom_p[m][match[m]];
+                if(man_p[w][m]< man_p[w][watch[w]])
+                {
+                    single[watch[w]]=1;
+                    watch[w]=m;
+                    single[m]=0;
+  
+				}
+			}
+		}
+	}
+}
+    
+
+int main()
+{
+
+    int n,t,i,j,pref,l,k;
+    int m; 
+ 	cout<<"Enter the test value:";
+ 	cin>>t;
+ 	
+ 	while(t--)
+ 	{
+ 	    cout<<"Enter the total no. of men and women: ";
+        cin>>n;
+        cout<<"Enter till what index we have good women and men:";
+        cin>>k;
+ 		for(i=0; i<n; i++)                      //Man preference
+ 		{   
+ 		    cout<<"Man no:";
+            cin>>l;
+ 			for(j=0; j<k; j++)
+ 			{   
+ 			    cout<<"Pref (only the good women):";
+                cin>>pref;
+	 			man_p[l-1][pref-1]=j; 
+ 			}
+ 		}
+ 		
+ 		 for(i=0; i<n; i++)                     //Woman preference
+ 		 {  
+ 		    cout<<"Woman no:";
+            cin>>m;
+ 			for(j=0; j<k; j++)
+ 			{
+ 			    cout<<"Pref (only the good man):";
+ 				cin>>pref;
+ 				wom_p[m-1][j] = pref-1;
+ 			}
+ 		 }
+ 		 
+ 		stable_marriage();
+ 		
+ 		//Displaying the matches
+ 		cout<<"The stable matches are:"<<endl;
+ 		for (i=0; i<n; i++)
+ 		{
+ 		    cout<<i+1<<"  "<<wom_p[i][match[i]]+1<<endl;
+ 		}
+ 		
+ 	}
+ 	return 0;
+ 		
+}
