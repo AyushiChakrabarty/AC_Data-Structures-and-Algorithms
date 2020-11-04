@@ -1,0 +1,61 @@
+#include<iostream>
+using namespace std;
+
+
+int in_graph[6][6] = 
+{
+   {0, 1, 0, 0, 0, 0},
+   {0, 0, 0, 1, 0, 0},
+   {0, 1, 0, 0, 0, 0},
+   {1, 0, 1, 0, 1, 0},
+   {0, 1, 0, 1, 0, 1},
+   {1, 0, 0, 0, 0, 0}
+
+};
+
+
+void trans_c(int in_graph[6][6],int n)
+{   
+    int N=n;
+    int out_graph[N][N];
+    int i,j,k;
+    
+    for(i=0; i<N; i++)
+    {
+        for(j=0; j<N; j++)
+        {
+            out_graph[i][j]=in_graph[i][j];
+        }
+    }
+    
+    
+    for(k=0; k<N; k++)
+    {
+        for(i=0; i<N;i++)
+        {
+            for(j=0;j<N;j++)
+            {
+                out_graph[i][j] = out_graph[i][j] || (out_graph[i][k] && out_graph[k][j]);
+        
+            }
+        }
+        
+    }
+    
+    //Printing
+      for(i=0; i<N; i++) 
+      {
+        for(j=0; j<N; j++)
+            cout << out_graph[i][j] << " ";
+        cout << endl;
+      }
+}      
+
+int main()
+{
+    int n;
+    cout<<"Enter the total number of nodes in the graph:\n";
+    cin>>n;
+    cout<<"The Transitive closure matrix is:\n";
+    trans_c(in_graph,n);
+
