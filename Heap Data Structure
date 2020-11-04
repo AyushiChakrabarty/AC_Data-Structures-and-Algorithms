@@ -1,0 +1,111 @@
+//HEAPS
+#include<iostream>
+using namespace std;
+
+
+//function to check whether given set of arrays is a max heap or not
+int check_heap(int c[],int count, int n)
+{
+    if( count>(n-2)/2)  
+        return 1;
+    
+    if(c[count]>=c[2*count + 2] && c[count]>=c[2*count +1] && check_heap(c, 2*count + 2, n) && check_heap(c, 2* count +1,n))
+        return 1;
+ 
+ return 0; 
+} 
+
+
+void heapify(int arr[], int n, int i) 
+{ 
+    int largest = i;  
+    int l = 2*i + 1;  
+    int r = 2*i + 2; 
+  
+    // If left child is larger than root 
+    if (l < n && arr[l] > arr[largest]) 
+        largest = l; 
+  
+    // If right child is larger than largest so far 
+    if (r < n && arr[r] > arr[largest]) 
+        largest = r; 
+  
+    // If largest is not root 
+    if (largest != i) 
+    { 
+        swap(arr[i], arr[largest]); 
+  
+        // Recursively heapify the affected sub-tree 
+        heapify(arr, n, largest); 
+    } 
+} 
+  
+
+void heapSort(int arr[], int n) 
+{ 
+    // Build heap (rearrange array) 
+    for (int i = n / 2 - 1; i >= 0; i--) 
+        heapify(arr, n, i); 
+  
+    // One by one extract an element from heap 
+    for (int i=n-1; i>0; i--) 
+    { 
+        // Move current root to end 
+        swap(arr[0], arr[i]); 
+  
+        // call max heapify on the reduced heap 
+        heapify(arr, i, 0); 
+    } 
+} 
+  
+/* A utility function to print array of size n */
+void printArray(int arr[], int n) 
+{ 
+    for (int i=0; i<n; ++i) 
+        cout << arr[i] << " "; 
+    cout << "\n"; 
+} 
+
+int main()
+{
+    int i;
+    int l1, l2;
+    int a[]={16,4,10,14,7,9,3,2,8,1};
+    int b[]={16,10,14,7,8,9,3,2,4,1};
+    
+    l1=sizeof(a)/sizeof(int);
+    l2=sizeof(b)/sizeof(int);
+    
+    int result1=check_heap(a,0,l1);
+    int result2=check_heap(b,0,l2);
+    
+    //check the first array
+    if(result1==1)
+        cout<<"First case: Is a HEAP\n";
+    else
+        cout<<"First case: Is not a HEAP\n";
+    
+    //check the second array
+    if(result2==1)
+            cout<<"Second case: Is a HEAP\n";
+    else
+        cout<<"Second case: Is not a HEAP\n";
+    
+    cout<<"\n";    
+    // Heapify
+    cout<<"First case: Before heapification:\n";
+    printArray(a, l1);
+    heapSort(a, l1); 
+  
+    cout << "Sorted array-1 is \n"; 
+    printArray(a, l1);
+    cout<<"Heapified................."<<"\n";
+    
+    heapSort(b, l2);
+    
+    cout<<"Second case: Sorted array-2 is \n";
+    printArray(b, l2);
+    
+
+
+}
