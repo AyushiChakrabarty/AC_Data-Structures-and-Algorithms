@@ -1,0 +1,88 @@
+//Interval Scheduling question
+
+#include<iostream>
+#include<stdio.h>
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+// declare a structure with start and finish time variables
+struct act 
+{ 
+    int start;
+    int finish; 
+}; 
+  
+//Element ascending order comparison on the basis of finish time
+bool comp(act a1, act a2) 
+{ 
+    return (a1.finish < a2.finish); 
+} 
+  
+//Find the maximum subset of mutually compatible jobs
+void max_act(act a[], int n) 
+{ 
+    int j,i=0;
+    int count;
+    sort(a, a+n,comp);          //sorting on the basis of finish time
+    
+    cout << "Maximum subset of mutually compatible jobs are:"<<endl; 
+    cout<<endl;
+    
+    cout<<"(Start, Finish):"<<"("<<a[i].start<<","<<a[i].finish<<")"<<endl; 
+    count=1;  
+    
+    for (j = 1; j < n; j++) 
+    { 
+      if (a[i].finish<=a[j].start) 
+      { 
+          cout<<"(Start, Finish):"<<"("<<a[j].start<<","<<a[j].finish<<")"<<endl; 
+          i=j;
+          count++;
+      } 
+    }
+    
+    cout<<"Total requests approved:"<<count<<endl;
+} 
+  
+//Main program
+int main() 
+{ 
+    act a[]={{0, 6},{1, 4},{3, 5},{3, 8},{4, 7},{5, 9},{6, 10},{8, 11}}; 
+    int n = sizeof(a)/sizeof(a[0]); 
+    max_act(a, n); 
+    
+    cout<<endl;
+    cout<<"Test case:1"<<endl;
+    
+    act arr1[]={{0, 2},{2, 3},{4, 6},{7, 8},{5, 9},{3, 10},{6, 9}}; 
+    int n1 = sizeof(arr1)/sizeof(arr1[0]); 
+    max_act(arr1, n1); 
+    
+    cout<<endl;
+    cout<<"Test case:2"<<endl;
+    
+    act arr2[]={{1, 2},{3, 5},{2, 6},{6, 8}}; 
+    int n2 = sizeof(arr2)/sizeof(arr2[0]); 
+    max_act(arr2, n2); 
+    
+    cout<<endl;
+    cout<<"Test case:3"<<endl;
+    
+    act arr3[]={{2, 4},{0, 6},{5, 7},{8, 9}}; 
+    int n3 = sizeof(arr3)/sizeof(arr3[0]); 
+    max_act(arr3, n3); 
+    
+    cout<<endl;
+    cout<<"Test case:4"<<endl;
+    
+    act arr4[]={{2, 3},{4, 6},{1, 8},{5, 9},{9, 10},{6, 9}}; 
+    int n4 = sizeof(arr4)/sizeof(arr4[0]); 
+    max_act(arr4, n4); 
+    
+    cout<<endl;
+    cout<<"Test case:5"<<endl;
+    
+    act arr5[]={{4, 9},{1, 2}}; 
+    int n5 = sizeof(arr5)/sizeof(arr5[0]); 
+    max_act(arr5, n5);   
+    return 0; }
