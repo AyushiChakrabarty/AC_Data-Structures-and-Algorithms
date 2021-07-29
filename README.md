@@ -1,3 +1,3 @@
 ### Practice coding
 
-Practice Data Structures and Algorithms codes.
+Practice codes in Data Structures and Algorithms. An amalgamation of the possible types/varieties of important codes.
