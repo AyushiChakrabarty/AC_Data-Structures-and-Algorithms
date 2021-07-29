@@ -1,3 +1,3 @@
-# Practice coding_Data Structures and Algorithms
+### Practice coding
 
-Easy to understand codes.
+Practice Data Structures and Algorithms codes.
